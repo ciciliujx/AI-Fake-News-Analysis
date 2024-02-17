@@ -7,8 +7,8 @@ import csv
 from openai import OpenAI
 
 #----------- setup ---------------
-# os.chdir("../../OneDrive - The University Of British Columbia/REX/2024/data/PUBHEALTH/PUBHEALTH")
-# os.getcwd()
+os.chdir("../../OneDrive - The University Of British Columbia/REX/2024/data/PUBHEALTH/PUBHEALTH")
+os.getcwd()
 
 random.seed(100)
 
@@ -70,7 +70,7 @@ filename = 'ai-generated.csv'
 #         # Write the columns to the CSV
 #         writer.writerow([claim_id, article])
 
-#----------- compare results ---------------
+#----------- merge human-written real news and ai-generated news ---------------
 
 ai2 = pd.read_excel("ai2.xlsx")
 ai2['claim_id'] = ai2['claim_id'].apply(lambda x : x.split()[1])
@@ -86,5 +86,13 @@ df = df.rename(columns={'claim_y': 'claim',
                         'main_text_y' : 'human_written_text',
                         'generated_news_article' : 'ai_generated_text'})
 
+os.chdir("C:/Users/cicil/Desktop/py")
 df.to_csv("merged.csv", index=False, encoding='utf-8-sig')
 
+#----------- create human-written fake news dataset ---------------
+fake_news = train["label"]=="false"
+fake_health = train.loc[health_subject & fake_news]
+# extract a sample with 100 rows
+fake_news_set = fake_health.sample(100)
+
+fake_news_set.to_csv("fake_news.csv", index=False, encoding='utf-8-sig')
