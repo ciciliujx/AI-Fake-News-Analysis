@@ -3,10 +3,10 @@ import numpy as np
 from scipy.stats import (ttest_ind,
                          ttest_rel)
 
-ling_data = pd.read_csv("language_features.csv")
+ling_data = pd.read_csv("features/language_features.csv")
 ling_data.columns
 
-sents_data = pd.read_csv("sentiment_features.csv")
+sents_data = pd.read_csv("features/sentiment_features.csv")
 sents_data.columns
 
 def cal_stats_real_fake(real, fake):

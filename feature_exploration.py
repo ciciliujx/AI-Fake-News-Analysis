@@ -75,21 +75,21 @@ def display_wordcloud(wordcloud):
 real_non_verbs = remove_verbs(real_fil)
 real_wordcloud = generate_wordcloud(real_non_verbs)
 display_wordcloud(real_wordcloud)
-plt.savefig(f'real_wordcloud.png', dpi = 300)
+plt.savefig(f'wordcloud/real_wordcloud.png', dpi = 300)
 plt.show()
 
 # human-written fake
 fake_non_verbs = remove_verbs(fake_fil)
 fake_wordcloud = generate_wordcloud(fake_non_verbs)
 display_wordcloud(fake_wordcloud)
-plt.savefig(f'fake_wordcloud.png', dpi = 300)
+plt.savefig(f'wordcloud/fake_wordcloud.png', dpi = 300)
 plt.show()
 
 # AI-generated
 ai_non_verbs = remove_verbs(ai_fil)
 ai_wordcloud = generate_wordcloud(ai_non_verbs)
 display_wordcloud(ai_wordcloud)
-plt.savefig(f'ai_wordcloud.png', dpi = 300)
+plt.savefig(f'wordcloud/ai_wordcloud.png', dpi = 300)
 plt.show()
 
 # ---Language Feature---
@@ -361,7 +361,7 @@ sentiment_df = pd.DataFrame({
     'fake_article_sub': fake_article_sub,
     'ai_article_sub': ai_article_sub})
 
-sentiment_df.to_csv("sentiment_features.csv", index=False, encoding='utf-8-sig')
+sentiment_df.to_csv("features/sentiment_features.csv", index=False, encoding='utf-8-sig')
 
 language_lists = [real_word_len_list, fake_word_len_list, ai_word_len_list, 
                   real_sentence_len_list, fake_sentence_len_list, ai_sentence_len_list,
@@ -391,4 +391,4 @@ language_df = pd.DataFrame({
     'fake_no_verifiable_facts': extended_lists[10],
     'ai_no_verifiable_facts': extended_lists[11]})
 
-language_df.to_csv("language_features.csv", index=False, encoding='utf-8-sig')
+language_df.to_csv("features/language_features.csv", index=False, encoding='utf-8-sig')
