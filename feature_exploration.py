@@ -375,17 +375,20 @@ max_length_index, max_length_list = max(enumerate(language_lists), key=lambda x:
 max_length = len(max_length_list)
 
 # Extend each list to match the max_length
-# !!! not working
-extended_lists = [lst.append([np.nan] * (max_length - len(lst))) for lst in language_lists]
+extended_lists = [lst + [np.nan] * (max_length - len(lst)) for lst in language_lists]
 
 language_df = pd.DataFrame({
-    'real_word_len_list': real_word_len_list,
-    'ai_word_len_list': ai_word_len_list,
-    'real_sentence_len_list': real_sentence_len_list,
-    'ai_sentence_len_list': ai_sentence_len_list,
-    'real_article_len_list': real_article_len_list,
-    'ai_article_len_list': ai_article_len_list,
-    'real_no_verifiable_facts': real_no_verifiable_facts,
-    'ai_no_verifiable_facts': ai_no_verifiable_facts})
+    'real_word_len_list': extended_lists[0],
+    'fake_word_len_list': extended_lists[1],
+    'ai_word_len_list': extended_lists[2],
+    'real_sentence_len_list': extended_lists[3],
+    'fake_sentence_len_list': extended_lists[4],
+    'ai_sentence_len_list': extended_lists[5],
+    'real_article_len_list': extended_lists[6],
+    'fake_article_len_list': extended_lists[7],
+    'ai_article_len_list': extended_lists[8],
+    'real_no_verifiable_facts': extended_lists[9],
+    'fake_no_verifiable_facts': extended_lists[10],
+    'ai_no_verifiable_facts': extended_lists[11]})
 
-type(real_no_verifiable_facts)
+language_df.to_csv("language_features.csv", index=False, encoding='utf-8-sig')
