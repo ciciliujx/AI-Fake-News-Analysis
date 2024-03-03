@@ -233,15 +233,15 @@ ai_percentage_verifiable_facts = derive_percentage(ai_no_verifiable_facts, ai_no
 ai_avg_percentage_verifiable_facts = np.mean(ai_percentage_verifiable_facts)
 
 # (stacked barplot)
-categories = ['Human-Written Real News', 'Human-Written Fake News', 'AI-generated News']
+categories = ['Real', 'Fake', 'AI']
 no_of_verifiable_facts = [real_avg_no_verifiable_facts, fake_avg_no_verifiable_facts, ai_avg_no_verifiable_facts]
 article_length_in_tokens = [real_no_word-real_avg_no_verifiable_facts, fake_no_word-fake_avg_no_verifiable_facts, ai_no_word-ai_avg_no_verifiable_facts]
 percentage_of_verifiable_facts = [real_avg_percentage_verifiable_facts, fake_avg_percentage_verifiable_facts, ai_avg_percentage_verifiable_facts]
 ind = np.arange(len(categories))
 
 plt.figure(figsize=(8, 6))
-bars_no = plt.bar(ind, no_of_verifiable_facts, label='No. of Verifiable Facts', color='blue')
-plt.bar(ind, article_length_in_tokens, bottom=no_of_verifiable_facts, label='Article Length in Words', color='gray')
+bars_no = plt.bar(ind, no_of_verifiable_facts, label='No. of Verifiable Facts', color='#ff5722')
+plt.bar(ind, article_length_in_tokens, bottom=no_of_verifiable_facts, label='Article Length in Words', color='#4285f4')
 
 def add_bar_labels(bars, data):
     """
@@ -253,14 +253,14 @@ def add_bar_labels(bars, data):
     """
     for bar, value in zip(bars, data):
         height = bar.get_height()
-        plt.text(bar.get_x() + bar.get_width() / 2.0, bar.get_y() + height + 20,
-                 f'{value.round(4)*100}%', ha='center', va='center', color='black')
+        plt.text(bar.get_x() + bar.get_width() / 2.0, bar.get_y() + height + 30,
+                 f'{"%.2f" % (value.round(4)*100)}%', ha='center', va='center', color='white', fontsize=20)
 
 add_bar_labels(bars_no, percentage_of_verifiable_facts)  
         
-plt.ylabel('No. of Words')
-plt.title('Percentage of Verifiable Facts per Article')
-plt.xticks(ind, categories)
+plt.ylabel('No. of Words', fontsize=20)
+plt.title('Percentage of Verifiable Facts per Article', fontsize=20)
+plt.xticks(ind, categories, fontsize=20)
 plt.legend()
 plt.savefig("plot/verifiable_facts.png", dpi=300, bbox_inches='tight')
 plt.show()
@@ -288,26 +288,26 @@ ai_article_pol = cal_article_polarity(ai_sentence_pol)
 ai_avg_article_pol = np.mean(ai_article_pol)
 
 # (histograms)
-fig, axs = plt.subplots(3, 1, figsize=(4, 6), sharey=True, sharex=True)
+fig, axs = plt.subplots(1, 3, figsize=(6, 4), sharey=True, sharex=True)
 
 data_min, data_max = -0.2, 0.3
 bin_width = 0.03
 bin_edges_pol = np.arange(start=data_min, stop=data_max + bin_width, step=bin_width)
 def ax_plot(i, title, score_list, avg_score, color, bin_edges):
-    axs[i].hist(score_list, bins=bin_edges, color=color, alpha=0.7, edgecolor='black')
-    axs[i].axvline(avg_score, color='red', lw = 2, linestyle='--')
-    axs[i].text(avg_score+0.01,20,f'x = {avg_score.round(2)}', color='red')
-    axs[i].set_title(title)
+    axs[i].hist(score_list, bins=bin_edges, color=color, alpha=0.7, edgecolor='black', orientation = "horizontal")
+    axs[i].axhline(avg_score, color='red', lw = 2, linestyle='--')
+    axs[i].text(20,avg_score-0.075,f'{avg_score.round(2)}', color='red',fontsize=15)
+    axs[i].set_title(title, fontsize=15)
 
-ax_plot(0, 'Human-Written Real News', real_article_pol, real_avg_article_pol, 'blue', bin_edges_pol)
-ax_plot(1, 'Human-Written Fake News', fake_article_pol, fake_avg_article_pol, 'gray', bin_edges_pol)
-ax_plot(2, 'AI-generated Real News', ai_article_pol, ai_avg_article_pol, 'orange', bin_edges_pol)
+ax_plot(0, 'Real', real_article_pol, real_avg_article_pol, '#4285f4', bin_edges_pol)
+ax_plot(1, 'Fake', fake_article_pol, fake_avg_article_pol, 'gray', bin_edges_pol)
+ax_plot(2, 'AI', ai_article_pol, ai_avg_article_pol, '#ff5722', bin_edges_pol)
 
 for ax in axs:
-    ax.set_xlabel('Polarity Score')
-    ax.set_ylabel('Frequency')
     ax.xaxis.set_tick_params(labelbottom=True)
 
+fig.supylabel('Polarity Score', fontsize=20)
+fig.supxlabel('Frequency', fontsize=20)
 plt.tight_layout()
 plt.savefig('plot/polarity.png', dpi=300, bbox_inches='tight')
 plt.show()
@@ -382,6 +382,25 @@ fake_percentage_avg_affect_words = np.mean(fake_percentage_affect_words)
 ai_percentage_affect_words = derive_percentage(ai_no_affect_word, ai_no_word_list)
 ai_percentage_avg_affect_words = np.mean(ai_percentage_affect_words)
 
+# (stacked barplot)
+no_of_affect_word = [real_avg_no_affect_word, fake_avg_no_affect_word, ai_avg_no_affect_word]
+article_length_in_tokens_aw = [real_no_word-real_avg_no_affect_word, fake_no_word-fake_avg_no_affect_word, ai_no_word-ai_avg_no_affect_word]
+percentage_of_affect_words = [real_percentage_avg_affect_words, fake_percentage_avg_affect_words, ai_percentage_avg_affect_words]
+ind = np.arange(len(categories))
+
+plt.figure(figsize=(8, 6))
+bars_no_aw = plt.bar(ind, no_of_affect_word, label='No. of Affect Words', color='#ff5722')
+plt.bar(ind, article_length_in_tokens_aw, bottom=no_of_affect_word, label='Article Length in Words', color='#4285f4')
+        
+add_bar_labels(bars_no_aw, percentage_of_affect_words)  
+        
+plt.ylabel('No. of Words', fontsize=20)
+plt.title('Percentage of Affect Words per Article', fontsize=20)
+plt.xticks(ind, categories, fontsize=20)
+plt.legend()
+plt.savefig("plot/emotiveness.png", dpi=300, bbox_inches='tight')
+plt.show()
+
 # subjectivity
 def cal_sentence_subjectivity(sentences):
     return sentences.map(lambda x: [TextBlob(sentence).sentiment.subjectivity for sentence in x])
@@ -407,16 +426,17 @@ data_min, data_max = 0, 0.7
 bin_width = 0.05
 bin_edges_sub = np.arange(start=data_min, stop=data_max + bin_width, step=bin_width)
 
-fig, axs = plt.subplots(3, 1, figsize=(4, 6), sharey=True, sharex=True)
+fig, axs = plt.subplots(1, 3, figsize=(6, 4), sharey=True, sharex=True)
 
-ax_plot(0, 'Human-Written Real News', real_article_sub, real_avg_sub, 'blue', bin_edges_sub)
-ax_plot(1, 'Human-Written Fake News', fake_article_sub, fake_avg_sub, 'gray', bin_edges_sub)
-ax_plot(2, 'AI-generated Real News', ai_article_sub, ai_avg_sub, 'orange', bin_edges_sub)
+ax_plot(0, 'Real', real_article_sub, real_avg_sub, '#4285f4', bin_edges_sub)
+ax_plot(1, 'Fake', fake_article_sub, fake_avg_sub, 'gray', bin_edges_sub)
+ax_plot(2, 'AI', ai_article_sub, ai_avg_sub, '#ff5722', bin_edges_sub)
 
 for ax in axs:
-    ax.set_xlabel('Subjectivity Score')
-    ax.set_ylabel('Frequency')
     ax.xaxis.set_tick_params(labelbottom=True)
+
+fig.supylabel('Subjectivity Score', fontsize=20)
+fig.supxlabel('Frequency', fontsize=20)
 
 plt.tight_layout()
 plt.savefig('plot/subjectivity.png', dpi=300, bbox_inches='tight')
