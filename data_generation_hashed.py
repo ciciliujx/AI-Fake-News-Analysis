@@ -28,7 +28,7 @@ np.average(train_word) # 450-660
 
 #------------ generate output ------------------
 
-client = OpenAI(api_key= my_key)
+# client = OpenAI(api_key= my_key)
 
 # List of prompts to loop over
 prompts = train_set['claim']
